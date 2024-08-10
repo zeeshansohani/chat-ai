@@ -48,6 +48,7 @@ export const userSignup = async (
       domain: "chat-ai-qiuu.onrender.com", // Updated to match backend domain
       httpOnly: true,
       secure: true, // Set to true since using HTTPS
+      sameSite: "none", // Crucial for cross-origin requests
       signed: true,
     });
 
@@ -62,6 +63,7 @@ export const userSignup = async (
       expires,
       httpOnly: true,
       secure: true, // Set to true since using HTTPS
+      sameSite: "none", // Crucial for cross-origin requests
       signed: true,
     });
 
@@ -106,6 +108,7 @@ export const userLogin = async (
       domain: "chat-ai-qiuu.onrender.com", // Updated to match backend domain
       httpOnly: true,
       secure: true, // Set to true since using HTTPS
+      sameSite: "none", // Crucial for cross-origin requests
       signed: true,
     });
 
@@ -120,6 +123,7 @@ export const userLogin = async (
       expires,
       httpOnly: true,
       secure: true, // Set to true since using HTTPS
+      sameSite: "none", // Crucial for cross-origin requests
       signed: true,
     });
 
@@ -188,6 +192,7 @@ export const userLogout = async (
       domain: "chat-ai-qiuu.onrender.com", // Updated to match backend domain
       httpOnly: true,
       secure: true, // Set to true since using HTTPS
+      sameSite: "none", // Crucial for cross-origin requests
       signed: true,
     });
 

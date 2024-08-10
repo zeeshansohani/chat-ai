@@ -36,6 +36,7 @@ export const userSignup = async (req, res, next) => {
             domain: "chat-ai-qiuu.onrender.com", // Updated to match backend domain
             httpOnly: true,
             secure: true, // Set to true since using HTTPS
+            sameSite: "none", // Crucial for cross-origin requests
             signed: true,
         });
         const token = createToken(user._id.toString(), user.email, "7d");
@@ -48,6 +49,7 @@ export const userSignup = async (req, res, next) => {
             expires,
             httpOnly: true,
             secure: true, // Set to true since using HTTPS
+            sameSite: "none", // Crucial for cross-origin requests
             signed: true,
         });
         return res.status(201).json({
@@ -85,6 +87,7 @@ export const userLogin = async (req, res, next) => {
             domain: "chat-ai-qiuu.onrender.com", // Updated to match backend domain
             httpOnly: true,
             secure: true, // Set to true since using HTTPS
+            sameSite: "none", // Crucial for cross-origin requests
             signed: true,
         });
         const token = createToken(user._id.toString(), user.email, "7d");
@@ -97,6 +100,7 @@ export const userLogin = async (req, res, next) => {
             expires,
             httpOnly: true,
             secure: true, // Set to true since using HTTPS
+            sameSite: "none", // Crucial for cross-origin requests
             signed: true,
         });
         return res.status(200).json({
@@ -155,6 +159,7 @@ export const userLogout = async (req, res, next) => {
             domain: "chat-ai-qiuu.onrender.com", // Updated to match backend domain
             httpOnly: true,
             secure: true, // Set to true since using HTTPS
+            sameSite: "none", // Crucial for cross-origin requests
             signed: true,
         });
         return res.status(200).json({
