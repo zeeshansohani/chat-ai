@@ -1,7 +1,7 @@
 import User from "../models/User.js";
 import { hash, compare } from "bcrypt";
 import { createToken } from "../utils/token-manager.js";
-import { COOKIE_NAME } from "../utils/constants.js";
+// Fetch all users
 export const getAllUsers = async (req, res, next) => {
     try {
         const users = await User.find();
@@ -17,6 +17,7 @@ export const getAllUsers = async (req, res, next) => {
         });
     }
 };
+// User signup
 export const userSignup = async (req, res, next) => {
     try {
         const { name, email, password } = req.body;
@@ -29,65 +30,73 @@ export const userSignup = async (req, res, next) => {
         const hashedPassword = await hash(password, 10);
         const user = new User({ name, email, password: hashedPassword });
         await user.save();
-        // create token and store cookie
-        res.clearCookie(COOKIE_NAME, {
+        // Clear old cookie if exists
+        res.clearCookie("auth_token", {
             path: "/",
-            domain: "keen-duckanoo-eb6256.netlify.app",
+            domain: "chat-ai-qiuu.onrender.com", // Updated to match backend domain
             httpOnly: true,
+            secure: true, // Set to true since using HTTPS
             signed: true,
         });
         const token = createToken(user._id.toString(), user.email, "7d");
         const expires = new Date();
         expires.setDate(expires.getDate() + 7);
-        res.cookie(COOKIE_NAME, token, {
+        // Set new cookie
+        res.cookie("auth_token", token, {
             path: "/",
-            domain: "keen-duckanoo-eb6256.netlify.app",
+            domain: "chat-ai-qiuu.onrender.com", // Updated to match backend domain
             expires,
             httpOnly: true,
+            secure: true, // Set to true since using HTTPS
             signed: true,
         });
         return res.status(201).json({
-            messaage: "Account created successfully",
+            message: "Account created successfully",
             name: user.name,
             email: user.email,
         });
     }
     catch (error) {
-        return res.status(200).json({
+        return res.status(400).json({
             message: "ERROR",
             cause: error.message,
         });
     }
 };
+// User login
 export const userLogin = async (req, res, next) => {
     try {
         const { email, password } = req.body;
         const user = await User.findOne({ email });
         if (!user) {
             return res.status(401).json({
-                message: "This email is not registered, Try again.",
+                message: "This email is not registered. Try again.",
             });
         }
         const isPasswordCorrect = await compare(password, user.password);
         if (!isPasswordCorrect) {
             return res.status(403).json({
-                message: "Incorrect Password, Try again.",
+                message: "Incorrect Password. Try again.",
             });
         }
-        res.clearCookie(COOKIE_NAME, {
+        // Clear old cookie if exists
+        res.clearCookie("auth_token", {
             path: "/",
-            domain: "keen-duckanoo-eb6256.netlify.app",
+            domain: "chat-ai-qiuu.onrender.com", // Updated to match backend domain
             httpOnly: true,
+            secure: true, // Set to true since using HTTPS
             signed: true,
         });
         const token = createToken(user._id.toString(), user.email, "7d");
         const expires = new Date();
         expires.setDate(expires.getDate() + 7);
-        res.cookie(COOKIE_NAME, token, {
+        // Set new cookie
+        res.cookie("auth_token", token, {
             path: "/",
-            domain: "keen-duckanoo-eb6256.netlify.app",
+            domain: "chat-ai-qiuu.onrender.com", // Updated to match backend domain
             expires,
             httpOnly: true,
+            secure: true, // Set to true since using HTTPS
             signed: true,
         });
         return res.status(200).json({
@@ -97,12 +106,13 @@ export const userLogin = async (req, res, next) => {
         });
     }
     catch (error) {
-        return res.status(200).json({
+        return res.status(400).json({
             message: "ERROR",
             cause: error.message,
         });
     }
 };
+// Verify user
 export const verifyUser = async (req, res, next) => {
     try {
         const user = await User.findById(res.locals.jwtData.id);
@@ -121,12 +131,13 @@ export const verifyUser = async (req, res, next) => {
         });
     }
     catch (error) {
-        return res.status(200).json({
+        return res.status(400).json({
             message: "ERROR",
             cause: error.message,
         });
     }
 };
+// User logout
 export const userLogout = async (req, res, next) => {
     try {
         const user = await User.findById(res.locals.jwtData.id);
@@ -138,20 +149,22 @@ export const userLogout = async (req, res, next) => {
         if (user._id.toString() !== res.locals.jwtData.id) {
             return res.status(401).send("Permissions didn't match");
         }
-        res.clearCookie(COOKIE_NAME, {
+        // Clear the cookie on logout
+        res.clearCookie("auth_token", {
             path: "/",
-            domain: "keen-duckanoo-eb6256.netlify.app",
+            domain: "chat-ai-qiuu.onrender.com", // Updated to match backend domain
             httpOnly: true,
+            secure: true, // Set to true since using HTTPS
             signed: true,
         });
         return res.status(200).json({
-            message: "OK",
+            message: "Logged out successfully.",
             name: user.name,
             email: user.email,
         });
     }
     catch (error) {
-        return res.status(200).json({
+        return res.status(400).json({
             message: "ERROR",
             cause: error.message,
         });
