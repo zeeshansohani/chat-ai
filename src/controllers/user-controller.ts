@@ -71,6 +71,7 @@ export const userSignup = async (
       message: "Account created successfully",
       name: user.name,
       email: user.email,
+      token, // Add this line to include the token in the response
     });
   } catch (error) {
     return res.status(400).json({
@@ -131,6 +132,7 @@ export const userLogin = async (
       message: "Logged in successfully.",
       name: user.name,
       email: user.email,
+      token, // Add this line to include the token in the response
     });
   } catch (error) {
     return res.status(400).json({

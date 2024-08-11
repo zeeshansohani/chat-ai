@@ -56,6 +56,7 @@ export const userSignup = async (req, res, next) => {
             message: "Account created successfully",
             name: user.name,
             email: user.email,
+            token, // Add this line to include the token in the response
         });
     }
     catch (error) {
@@ -107,6 +108,7 @@ export const userLogin = async (req, res, next) => {
             message: "Logged in successfully.",
             name: user.name,
             email: user.email,
+            token, // Add this line to include the token in the response
         });
     }
     catch (error) {
