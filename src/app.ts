@@ -14,6 +14,8 @@ app.use(
   cors({
     origin: "https://chat-ai-now.netlify.app",
     credentials: true,
+    allowedHeaders: ["Content-Type", "Authorization"], // Explicitly allow headers
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"], // Allowed methods
   })
 );
 
